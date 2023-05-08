@@ -1,14 +1,21 @@
 import os
 import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.applications import VGG16
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Dense, Flatten, Dropout
+from tensorflow.keras.optimizers import Adam
 
 train_dir = 'dataset_train'
-batch_size = 16
+test_dir = 'dataset_test'
+batch_size = 32
 img_height, img_width = 224, 224
 input_shape = (img_height, img_width, 3)
 
-# Define the data generator
+# Define the data generators
 train_datagen = ImageDataGenerator(rescale=1./255)
+
+test_datagen = ImageDataGenerator(rescale=1./255)
 
 train_generator = train_datagen.flow_from_directory(
         train_dir,
@@ -16,15 +23,16 @@ train_generator = train_datagen.flow_from_directory(
         batch_size=batch_size,
         class_mode='categorical')
 
+test_generator = test_datagen.flow_from_directory(
+        test_dir,
+        target_size=(img_height, img_width),
+        batch_size=1,
+        class_mode='categorical')
+
 # Check the mapping of labels to class indices
 print(train_generator.class_indices)
 
 # Create the CNN model
-from tensorflow.keras.applications import VGG16
-from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Dense, Flatten, Dropout
-from tensorflow.keras.optimizers import Adam
-
 # Load the pre-trained VGG16 model
 base_model = VGG16(weights='imagenet', include_top=False, input_shape=input_shape)
 
@@ -48,5 +56,14 @@ model.compile(optimizer=Adam(lr=0.0001), loss='categorical_crossentropy', metric
 # Train the model
 history = model.fit(
         train_generator,
-        epochs=5,
+        epochs=10,
         steps_per_epoch=train_generator.samples // batch_size)
+
+# Save the model
+model.save('weather_classification.h5')
+
+# Evaluate the model on the test set
+test_loss, test_acc = model.evaluate(test_generator)
+
+print('Test loss:', test_loss)
+print('Test accuracy:', test_acc)
