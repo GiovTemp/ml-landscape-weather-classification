@@ -1,1 +1,3 @@
 weather_classification.h5
+weather_classification_with_preprocessing.h5
+weather_classification_without_preprocessing.h5
