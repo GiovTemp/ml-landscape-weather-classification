@@ -52,7 +52,7 @@ def preprocess_image(img_path, size=256, threshold=150, kernel_size=3, angle_ran
     img = equalize_hist(img)
 
     # Applica il filtro di mediana
-    img = median_filter(img, kernel_size)
+    #img = median_filter(img, kernel_size)
 
     # Applica la segmentazione basata sulla soglia
     img = threshold_segmentation(img, threshold)
@@ -64,6 +64,6 @@ def preprocess_image(img_path, size=256, threshold=150, kernel_size=3, angle_ran
     img = img.astype(np.float32) / 255.
 
     # Aggiungi una dimensione per rappresentare il batch
-    img = np.expand_dims(img, axis=-1)
+    #img = np.expand_dims(img, axis=-1)
 
     return img
