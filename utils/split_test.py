@@ -20,8 +20,8 @@ def move_files(source_dir, destination_dir, percentage):
         print(f"Spostato il file '{file_name}' in '{destination_dir}'.")
 
 # Imposta le cartelle di origine e destinazione
-source_folder = 'datasets/dataset2/train/shine'
-destination_folder = 'datasets/dataset2/test/shine'
+source_folder = 'datasets/dataset2/train/sunrise'
+destination_folder = 'datasets/dataset2/validation/sunrise'
 # Create the destination directory if it doesn't exist
 if not os.path.exists(destination_folder):
     os.makedirs(destination_folder)
